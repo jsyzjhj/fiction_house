@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.util.*;
 
 /**
@@ -53,12 +54,14 @@ public class BookFilter implements Filter {
         String requestUrl = req.getRequestURL().toString();
         String requestUri = req.getRequestURI();
 
+
         String forObject;
 
         try {
 
             //本地图片
             if (requestUri.contains(Constants.LOCAL_PIC_PREFIX)) {
+                resp.setDateHeader("expires", System.currentTimeMillis()+60*60*24*10*1000);//缓存10天
                 OutputStream out = resp.getOutputStream();
                 InputStream input = new FileInputStream(new File(picSavePath + requestUri));
                 byte[] b = new byte[4096];
@@ -76,6 +79,9 @@ public class BookFilter implements Filter {
                 filterChain.doFilter(req, resp);
                 return;
             }
+
+            requestUrl = URLDecoder.decode(requestUrl,"utf-8");
+            requestUri = URLDecoder.decode(requestUri,"utf-8");
 
 
             String method = req.getMethod();

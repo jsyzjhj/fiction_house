@@ -90,4 +90,24 @@ public class Constants {
      * 没有内容的描述
      * */
     public static final String NO_CONTENT_DESC = "正在手打中，请稍等片刻，内容更新后，需要重新刷新页面，才能获取最新更新";
+
+    /**
+     * 书籍内容页的广告pattern
+     * */
+    public static final String CONTENT_AD_PATTERN = "<div[^>]+app\\.html[^>]+>\\s*<div[^>]+>\\s*<div[^>]+>[^<]+</div>\\s*<div[^>]+>[^<]+<span[^>]+>>>[^<]+<<</span>\\s*</div>\\s*</div>\\s*</div>";
+
+    /**
+     * 是否开启抓取新书
+     * */
+    public static final String ENABLE_NEW_BOOK = "true";
+
+    /**
+     * SEO配置保存的key
+     * */
+    public static final String SEO_CONFIG_KEY = "seoConfig";
+
+    /**
+     * 每次更新抓取的页数
+     */
+    public static final int UPDATE_PAGES_ONCE = 10;
 }

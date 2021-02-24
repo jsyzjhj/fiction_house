@@ -1,23 +1,4 @@
-/*
-Navicat MySQL Data Transfer
 
-Source Server         : aliyun_books
-Source Server Version : 80018
-Source Host           : 47.106.243.172:3306
-Source Database       : books
-
-Target Server Type    : MYSQL
-Target Server Version : 80018
-File Encoding         : 65001
-
-Date: 2019-11-15 06:10:36
-*/
-
-
-
--- ----------------------------
--- Table structure for `book`
--- ----------------------------
 DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1010,4 +991,40 @@ INSERT INTO `sys_dict` (`id`, `name`, `value`, `type`, `description`, `sort`, `p
 INSERT INTO `sys_dict` (`id`, `name`, `value`, `type`, `description`, `sort`, `parent_id`, `create_by`, `create_date`, `update_by`, `update_date`, `remarks`, `del_flag`) VALUES ('129', '女生频道', '7', 'novel_category', '小说分类', '7', NULL, NULL, NULL, NULL, NULL, '', NULL);
 
 alter table user_ref_book add column `index_num` int(5);
+
+
+
+DROP TABLE IF EXISTS `book_parse_log`;
+CREATE TABLE `book_parse_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `book_url` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `book_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `score` float NOT NULL,
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_key_bookurl` (`book_url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `book_update_time_log`;
+CREATE TABLE `book_update_time_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_cat_id` int(11) NOT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_key_catid` (`book_cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `book_update_time_log` VALUES ('1', '1', NOW());
+INSERT INTO `book_update_time_log` VALUES ('2', '2', NOW());
+INSERT INTO `book_update_time_log` VALUES ('3', '3', NOW());
+INSERT INTO `book_update_time_log` VALUES ('4', '4', NOW());
+INSERT INTO `book_update_time_log` VALUES ('5', '5', NOW());
+INSERT INTO `book_update_time_log` VALUES ('6', '6', NOW());
+INSERT INTO `book_update_time_log` VALUES ('7', '7', NOW());
+
+ALTER  TABLE  book_parse_log  drop  INDEX  uq_key_bookurl;
+
+alter table book_parse_log add column `priority` TINYINT(2) not null default 10 ;
+
+alter table book_parse_log add column `update_count` TINYINT(2) not null default 0 ;
 

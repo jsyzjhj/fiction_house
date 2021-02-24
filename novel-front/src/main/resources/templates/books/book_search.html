@@ -5,24 +5,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>精品小说楼_小说列表</title>
+    <title th:text="${application.seoConfig.page['book-search.title']}"></title>
+
+    <meta name="keywords" th:content="${application.seoConfig.page['book-search.keyword']}">
 
     <meta name="description"
-          content="精品小说楼致力于打造小说最全，更新最快、无弹窗、无广告的在线小说阅读网，本站收录了当前最火热的网络小说，提供无广告、高质量内容的小说阅读和TXT小说下载服务，是广大网友最喜欢的温馨小说站。">
-    <meta name="keywords" content="精品小说楼,精品小说,弹幕网站,弹幕,弹幕小说网站,免费小说,小说阅读,小说排行,轻小说,txt小说下载,电子书下载,动漫轻小说,日本轻小说">
+          th:content="${application.seoConfig.page['book-search.description']}">
 
     <div th:include="common/css :: css"></div>
 
     </div>
-    <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?2cf01edbc2b27cd3a143e17948167d77";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 
     <style type="text/css">
 
@@ -113,9 +105,11 @@
 
 <div th:each="book : ${books}" class="layui-row" style="margin-bottom:10px;padding:10px;background: #f2f2f2">
     <a th:href="'/book/'+ ${book.id} + '.html'+ ${token!=null?'?token='+token:''}">
-    <div class="layui-col-xs6 layui-col-sm3 layui-col-md2 layui-col-lg2" style="text-align: center">
-        <img align="center"
-             th:src="${book.picUrl}"/>
+    <div class="layui-col-xs6 layui-col-sm3 layui-col-md2 layui-col-lg2" style="text-align: center" th:switch = "${application.noLazy}">
+        <img th:case="'1'" align="center"
+               th:src="${book.picUrl}"/>
+        <img th:case="*" align="center"
+             class="lazyload" th:attr="data-src=${book.picUrl}"/>
     </div>
     </a>
     <div style="padding: 20px" class="layui-col-xs6 layui-col-sm8 layui-col-md8 layui-col-lg8">
@@ -156,8 +150,10 @@
 </body>
 
 <div th:replace="common/js :: js"></div>
+<script src="/js/lazyload.js"></script>
 
 <script>
+    lazyload();
     layui.use('laypage', function () {
         var laypage = layui.laypage;
 
@@ -231,18 +227,6 @@
 
 </script>
 <script>
-    (function(){
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
 
 
     function toMyCollect(){

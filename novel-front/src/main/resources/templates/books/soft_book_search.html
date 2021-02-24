@@ -5,29 +5,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>精品小说楼_轻小说专区</title>
+    <title th:text="${application.seoConfig.page['soft-search.title']}"></title>
+
+    <meta name="keywords" th:content="${application.seoConfig.page['soft-search.keyword']}">
 
     <meta name="description"
-          content="精品小说楼是国内优秀的小说弹幕网站,精品小说楼提供海量网络小说,日本轻小说,国产轻小说,动漫小说,轻小说TXT下载,轻小说在线阅读和TXT小说下载,是网友最喜欢的温馨小说站。">
-    <meta name="keywords" content="精品小说楼,精品小说,弹幕网站,弹幕,弹幕小说网站,免费小说,小说阅读,小说排行,轻小说,txt小说下载,电子书下载,动漫轻小说,日本轻小说">
-
-    <meta property="og:type" content="soft_novel_index"/>
-    <meta property="og:title" content="精品小说楼_轻小说专区"/>
-    <meta property="og:description" content="精品小说楼是国内优秀的小说弹幕网站,精品小说楼提供海量热门网络小说,日本轻小说,国产轻小说,动漫小说,轻小说在线阅读和TXT小说下载,致力于网络精品小说的收集,智能计算小说评分,打造小说精品排行榜,致力于无广告无弹窗的小说阅读环境。"/>
-
+          th:content="${application.seoConfig.page['soft-search.description']}">
 
     <div th:include="common/css :: css"></div>
 
     </div>
-    <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?2cf01edbc2b27cd3a143e17948167d77";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 
     <style type="text/css">
 
@@ -88,7 +75,7 @@
 <input type="hidden" id="bookStatus" th:value="${bookStatus}"/>
 <input type="hidden" id="softCat" th:value="${softCat}"/>
 
-<ul class="layui-nav"  lay-filter="" style="padding:0 20px;text-align: center" >
+<ul class="layui-nav" lay-filter="" style="padding:0 20px;text-align: center">
     <li id="menunew" class="layui-nav-item"><a href="/book/searchSoftBook.html">最新</a></li>
     <li id="menu21" class="layui-nav-item"><a href="/book/searchSoftBook.html?softCat=21">魔幻</a></li>
     <li id="menu22" class="layui-nav-item"><a href="/book/searchSoftBook.html?softCat=22">玄幻</a></li>
@@ -100,7 +87,7 @@
     <li id="menu28" class="layui-nav-item"><a href="/book/searchSoftBook.html?softCat=28">同人</a></li>
     <li id="menu29" class="layui-nav-item"><a href="/book/searchSoftBook.html?softCat=29">悬疑</a></li>
     <li id="menu0" class="layui-nav-item"><a href="/book/searchSoftBook.html?softCat=0">动漫</a></li>
-    <li id="menucomplete" class="layui-nav-item"><a >完本</a>
+    <li id="menucomplete" class="layui-nav-item"><a>完本</a>
         <dl class="layui-nav-child"> <!-- 二级菜单 -->
             <dd><a href="/book/searchSoftBook.html?bookStatus=已完成">全部</a></dd>
             <dd><a href="/book/searchSoftBook.html?bookStatus=已完成&softCat=21">魔幻</a></dd>
@@ -115,7 +102,7 @@
             <dd><a href="/book/searchSoftBook.html?bookStatus=已完成&softCat=0">动漫</a></dd>
         </dl>
     </li>
-    <li id="menuhot" class="layui-nav-item"><a >排行</a>
+    <li id="menuhot" class="layui-nav-item"><a>排行</a>
         <dl class="layui-nav-child"> <!-- 二级菜单 -->
             <dd><a href="/book/searchSoftBook.html?sortBy=score">全部</a></dd>
             <dd><a href="/book/searchSoftBook.html?sortBy=score&softCat=21">魔幻</a></dd>
@@ -152,10 +139,13 @@
 
 <div th:each="book : ${books}" class="layui-row" style="margin-bottom:10px;padding:10px;background: #f2f2f2">
     <a th:href="'/book/'+ ${book.id} + '.html'">
-    <div class="layui-col-xs6 layui-col-sm3 layui-col-md2 layui-col-lg2" style="text-align: center">
-        <img align="center"
-             th:src="${book.picUrl}"/>
-    </div>
+        <div class="layui-col-xs6 layui-col-sm3 layui-col-md2 layui-col-lg2" style="text-align: center"
+             th:switch="${application.noLazy}">
+            <img th:case="'1'" align="center"
+                 th:attr="data-src=${book.picUrl}"/>
+            <img th:case="*" align="center"
+                 class="lazyload" th:attr="data-src=${book.picUrl}"/>
+        </div>
     </a>
     <div style="padding: 20px" class="layui-col-xs6 layui-col-sm8 layui-col-md8 layui-col-lg8">
         <a th:href="'/book/'+ ${book.id} + '.html'">
@@ -195,8 +185,10 @@
 </body>
 
 <div th:replace="common/js :: js"></div>
+<script src="/js/lazyload.js"></script>
 
 <script>
+    lazyload();
     layui.use('laypage', function () {
         var laypage = layui.laypage;
 
@@ -216,7 +208,7 @@
 
                 //首次不执行
                 if (!first) {
-                    searchByAllCondition(obj.curr,obj.limit);
+                    searchByAllCondition(obj.curr, obj.limit);
                 } else {
 
                 }
@@ -224,20 +216,20 @@
         });
     });
 
-    function searchByAllCondition(curr,limit,newKeyword){
+    function searchByAllCondition(curr, limit, newKeyword) {
         var toUrl = "/book/searchSoftBook.html?curr=" + curr + "&limit=" + limit;
         var ids = $("#ids").val();
-        if(ids){
+        if (ids) {
             toUrl += ("&historyBookIds=" + ids);
         }
         var keyword = $("#keyword").val();
-        if(newKeyword){
+        if (newKeyword) {
             toUrl += encodeURI("&keyword=" + newKeyword);
-        }else if (keyword) {
+        } else if (keyword) {
             toUrl += encodeURI("&keyword=" + keyword);
         }
         var bookStatus = $("#bookStatus").val();
-        if(bookStatus){
+        if (bookStatus) {
             toUrl += ("&bookStatus=" + bookStatus);
         }
         var softCat = $("#softCat").val();
@@ -265,49 +257,38 @@
     function searchBooks() {
         var keywords = $("#title").val();
         $("#keyword").val("");
-        searchByAllCondition(1,20,keywords);
+        searchByAllCondition(1, 20, keywords);
     }
 
 </script>
 <script>
-    (function(){
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
+    (function () {
 
 
         var sortCat = $("#softCat").val();
         var sortBy = $("#sortBy").val();
-        if(sortBy == 'score'){
+        if (sortBy == 'score') {
             $("#menuhot").addClass("layui-this");
-        }else if($("#bookStatus").val()){
+        } else if ($("#bookStatus").val()) {
             $("#menucomplete").addClass("layui-this");
-        }else if(sortCat){
-            $("#menu"+sortCat).addClass("layui-this");
-        }else{
+        } else if (sortCat) {
+            $("#menu" + sortCat).addClass("layui-this");
+        } else {
             $("#menunew").addClass("layui-this");
         }
 
     })();
 
 
-    function toMyCollect(){
+    function toMyCollect() {
         var token = localStorage.getItem("token");
-        if(token) {
+        if (token) {
             window.location.href = "/book/search?token=" + token;
-        }else{
+        } else {
             window.location.href = "/user/login.html";
         }
     }
 </script>
-
 
 
 </html>
